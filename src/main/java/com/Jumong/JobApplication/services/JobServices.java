@@ -7,13 +7,13 @@ import com.Jumong.JobApplication.dtos.request.AddJobRequest;
 import java.util.List;
 
 public interface JobServices {
-    void addJob(AddJobRequest addJobRequest);
-    Job findJob(Job job);
+    void createJob(AddJobRequest addJobRequest);
+
+    Job findJob(String title);
     List<Job> jobs(String companyName);
 
     List<Job> findAll();
-    void delete(Job job);
+    void delete(String title);
 
-    void delete(String CompanyName);
 
 }

@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface JobRepository extends MongoRepository<Job, String> {
-
+    Job findJobBy(String title);
 }

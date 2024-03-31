@@ -4,6 +4,7 @@ package com.Jumong.JobApplication.services;
 import com.Jumong.JobApplication.data.models.Job;
 import com.Jumong.JobApplication.data.repositories.JobRepository;
 import com.Jumong.JobApplication.dtos.request.AddJobRequest;
+import com.Jumong.JobApplication.exceptions.JobNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,7 @@ public class JobServicesImpl implements JobServices {
     @Autowired
     private JobRepository jobRepository;
     @Override
-    public void addJob(AddJobRequest addJobRequest) {
+    public void createJob(AddJobRequest addJobRequest) {
         Job job = new Job();
         job.setCompanyName(addJobRequest.getCompanyName());
         job.setTitle(addJobRequest.getTitle());
@@ -27,11 +28,13 @@ public class JobServicesImpl implements JobServices {
 
     }
 
-//    @Override
-//    public Job findJob(Job job) {
-//        Job foundJob = jobRepository.findById(job);
-//        return foundJob;
-//    }
+    @Override
+    public Job findJob(String title) {
+        Job foundJob = jobRepository.findJobBy(title);
+        if (foundJob == null) throw new JobNotFoundException(String.format("%s is unavailable", title));
+        return foundJob;
+    }
+
 
     @Override
     public List<Job> jobs(String companyName) {
@@ -50,12 +53,10 @@ public class JobServicesImpl implements JobServices {
     }
 
     @Override
-    public void delete(Job job) {
-        //Job deleteJob = jobRepository.findById(title);
+    public void delete(String title) {
+        Job deleteJob = jobRepository.findJobBy(title);
+        if (deleteJob ==null) throw new JobNotFoundException((String.format("%s job does no exist")));
+        jobRepository.delete(deleteJob);
     }
 
-    @Override
-    public void delete(String CompanyName) {
-
-    }
 }
